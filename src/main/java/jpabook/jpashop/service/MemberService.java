@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+//Test via Shift + Ctrl + T
 public class MemberService {
     //final annotation recommend
     private final MemberRepository memberRepository;

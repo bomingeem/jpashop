@@ -39,3 +39,9 @@
    · service
    · web
  - 개발 순서 : 서비스, 리포지토리 계층을 개발하고 → 테스트 케이스를 작성해서 검증 → 마지막에 웹 계층 적용
+ 
+테스트 작성 시 메모리 DB 얹는 방법 
+ 1. resources 디렉토리를 생성하여 main에서 동일한 application.yml을 생성
+ 2. url 경로에 h2database.com에서 제공하는 in-memory jdbc:h2:mem:test로 변경
+ (test 폴더에 application.yml 생성 시 우선순위가 test 디렉토리 내 application.yml로 순위가 매겨짐)
+ 
