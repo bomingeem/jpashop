@@ -20,7 +20,8 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private final ItemRepository itemRepository;
+    private final ItemService itemService;
+
     /**
      * 주문
      */
@@ -28,7 +29,7 @@ public class OrderService {
     public Long order(Long memberId, Long itemId, int count){
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
-        Item item = itemRepository.findOne(itemId);
+        Item item = itemService.findOne(itemId);
 
         //배송정보 생성
         Delivery delivery = new Delivery();
