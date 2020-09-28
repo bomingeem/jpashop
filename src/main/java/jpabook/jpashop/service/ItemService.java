@@ -25,6 +25,7 @@ public class ItemService {
     //넘어오는 파라미터가 많은 경우, Dto 이용
     public void updateItem(Long itemId, String name, int price, int stockQuantity){
         Item findItem = itemRepository.findOne(itemId);
+        //findItem.change(name, price, stockQuantity);
         findItem.setName(name);
         findItem.setPrice(price);
         findItem.setStockQuantity(stockQuantity);
