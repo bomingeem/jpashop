@@ -17,6 +17,9 @@ public class ItemRepository {
         if(item.getId() == null){
             em.persist(item);
         } else {
+            //반환된 객체는 영속성 컨텍스트에서 관리하는 객체가 되고
+            //파라미터로 받은 item은 준영속 상태 객체이기 때문에
+            //반환된 객체를 이용해서 쓰는것이 적절하다
             em.merge(item);
         }
     }
