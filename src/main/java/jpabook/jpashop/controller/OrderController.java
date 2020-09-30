@@ -21,21 +21,17 @@ public class OrderController {
     private final MemberService memberService;
     private final ItemService itemService;
 
-    @GetMapping("/order")
-    public String createForm(Model model){
+    @GetMapping(value = "/order")
+    public String createForm(Model model) {
         List<Member> members = memberService.findMembers();
         List<Item> items = itemService.findItems();
-
         model.addAttribute("members", members);
         model.addAttribute("items", items);
-
         return "order/orderForm";
     }
-
-    @PostMapping("/order")
+    @PostMapping(value = "/order")
     public String order(@RequestParam("memberId") Long memberId,
-                        @RequestParam("itemId") Long itemId,
-                        @RequestParam("count") int count){
+                        @RequestParam("itemId") Long itemId, @RequestParam("count") int count) {
         orderService.order(memberId, itemId, count);
         return "redirect:/orders";
     }
