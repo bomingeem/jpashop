@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class HomeController {
     //lombok을 사용하면 된다
-    //ogger log = LoggerFactory.getLogger(getClass());
+    //Logger log = LoggerFactory.getLogger(getClass());
     
     @RequestMapping("/")
     public String home(){

@@ -71,7 +71,9 @@ public class ItemController {
         //book.setStockQuantity(form.getStockQuantity());
         //book.setAuthor(form.getAuthor());
         //book.setIsbn(form.getIsbn());
-
+        //변경 감지 기능
+        //영속성 컨텍스트에서 엔티티를 다시 조회한 후에 데이터를 수정하는 방법
+        //트랜잭션 안에서 엔티티를 다시 조회,변경할 값 선택 → 트랜잭션 커밋 시점에 변경 감지(dirty checking)
         itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
 
         return "redirect:/items";
