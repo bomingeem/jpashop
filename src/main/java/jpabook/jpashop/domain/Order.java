@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain;
 
 import lombok.*;
+import org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
