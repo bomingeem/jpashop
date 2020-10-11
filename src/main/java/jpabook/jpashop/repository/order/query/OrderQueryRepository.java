@@ -14,6 +14,11 @@ public class OrderQueryRepository {
 
     private final EntityManager em;
 
+    /**
+     * 컬렉션은 별도로 조회
+     * Query : 루트 1번, 컬렉션 N번
+     * 단건 조회에서 많이 사용하는 방식
+     */
     public List<OrderQueryDto> findOrderQueryDtos(){
          List<OrderQueryDto> result = findOrders();
 
@@ -24,13 +29,16 @@ public class OrderQueryRepository {
          return result;
     }
 
+    /**
+     * 최적화
+     * Query : 루트 1번, 컬렉션 1번
+     * 데이터를 한꺼번에 처리할 때 많이 사용하는 방식
+     */
     public List<OrderQueryDto> findAllByDto_optimization() {
         List<OrderQueryDto> result = findOrders();
-
         List<Long> orderIds = toOrderIds(result);
 
         Map<Long, List<OrderItemQueryDto>> orderItemMap = findOrderItemMap(orderIds);
-
         result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
 
         return result;
@@ -56,6 +64,10 @@ public class OrderQueryRepository {
                     .collect(Collectors.toList());
     }
 
+    /**
+     *
+     * 1:N 관계인 orderItems 조회
+     */
     private List<OrderItemQueryDto> findOrderItems(Long orderId) {
         return em.createQuery(
                 "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
@@ -67,6 +79,9 @@ public class OrderQueryRepository {
                 .getResultList();
     }
 
+    /**
+     * 1:N 관계(컬렉션)를 제외한 나머지를 한번에 조회
+     */
     private List<OrderQueryDto> findOrders() {
         return em.createQuery(
                 "select new jpabook.jpashop.repository.order.query.OrderQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +

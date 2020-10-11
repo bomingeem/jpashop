@@ -64,6 +64,11 @@ public class OrderApiController {
         return result;
     }
 
+    /**
+     * - ToOne 관계만 우선 페치 조인으로 최적화
+     * - 컬렉션 관계는 페치 조인 대신에 지연로딩을 유지하고
+     *   hibernate.default_batch_fetch_size, @BatchSize로 최적화
+     */
     @GetMapping("/api/v3.1/orders")
     public List<OrderDto> ordersV3_page(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
@@ -81,11 +86,17 @@ public class OrderApiController {
         return orderQueryRepository.findOrderQueryDtos();
     }
 
+    /**
+     * 컬렉션 조회 최적화 - 일대다 관계인 컬렉션은 IN 절을 활용해서 메모리에 미리 조회해서 최적화
+     */
     @GetMapping("/api/v5/orders")
     public List<OrderQueryDto> ordersV5() {
         return orderQueryRepository.findAllByDto_optimization();
     }
 
+    /**
+     * 플랫 데이터 최적화 - JOIN 결과를 그대로 조회 후 애플리케이션에서 원하는 모양으로 직접 변환
+     */
     @GetMapping("/api/v6/orders")
     public List<OrderQueryDto> ordersV6() {
         List<OrderFlatDto> flats = orderQueryRepository.findAllByDto_flat();
@@ -117,6 +128,7 @@ public class OrderApiController {
             orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress();
+
             orderItems = order.getOrderItems().stream()
                     .map(orderItem -> new OrderItemDto(orderItem))
                     .collect(Collectors.toList());
