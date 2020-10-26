@@ -69,5 +69,7 @@ OSIV를 끄면 모든 지연로딩을 트랜잭션 안에서 처리해야 한다
  · OrderService
   · OrderService : 핵심 비즈니스 로직
   · OrderQueryService : 화면이나 API에 맞춘 서비스(주로 읽기 전용 트랜잭션 사용)
+  
+
 
  
