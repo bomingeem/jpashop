@@ -20,6 +20,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 권장 순서
+ * 1. 엔티티 조회 방식으로 우선 접근
+ *  1. 페치조인으로 쿼리 수를 최적화
+ *  2. 컬렉션 최적화
+ *    1. 페이징 필요 hibernate.default_batch_fetch_size, @BatchSize로 최적화
+ *    2. 페이징 필요 X → 페치 조인 사용
+ * 2. 엔티티 조회 방식으로 해결이 안되면 DTO 조회 방식 사용
+ * 3. DTO 조회 방식으로 해결이 안되면 NativeSQL 또는 스프링 JdbcTemplate
+ */
 @RestController
 @RequiredArgsConstructor
 public class OrderApiController {
@@ -27,6 +37,11 @@ public class OrderApiController {
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepository;
 
+    /**
+     * V1: 엔티티 직접 노출
+     * - Hibernate5Module 모듈 등록, LAZY=null 처리
+     * - 양방향 관계 문제 발생 → @JsonIgnore
+     */
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
@@ -57,6 +72,11 @@ public class OrderApiController {
         return result;
     }
 
+    /**
+     * V3.1: 엔티티를 조회해서 DTO로 변환 페이징 고려
+     * - ToOne 관계만 우선 모두 페치 조인으로 최적화
+     * - 컬렉션 관계는 hibernate.default_batch_fetch_size, @BatchSize로 최적화
+     */
     @GetMapping("/api/v3.1/orders")
     public List<OrderDto> ordersV3_page(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
